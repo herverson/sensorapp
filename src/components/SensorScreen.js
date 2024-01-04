@@ -1,12 +1,35 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-const SensorScreen = ({ data }) => (
-  <SafeAreaView style={{ flex: 1 }}>
-    <ScrollView style={{ flex: 1, padding: 16 }}>
-      <Text>{JSON.stringify(data)}</Text>
-    </ScrollView>
-  </SafeAreaView>
-);
+const SensorScreen = ({ data }) => {
+  return (
+    <View style={styles.container}>
+      {Object.entries(data).map(([key, value]) => (
+        <View key={key} style={styles.dataContainer}>
+          <Text style={styles.label}>{key}:</Text>
+          <Text style={styles.value}>{JSON.stringify(value)}</Text>
+        </View>
+      ))}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dataContainer: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  label: {
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
+  value: {},
+});
 
 export default SensorScreen;
