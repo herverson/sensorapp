@@ -1,28 +1,74 @@
-// In App.js in a new project
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Accelerometer, Gyroscope, Magnetometer, DeviceMotion } from 'expo-sensors';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import { initDatabase, saveData } from './src/services/database';
+import SensorScreen from './src/components/SensorScreen';
+import CustomTabBar from './src/components/TabBar';
 
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const App = () => {
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'accelerometer', title: 'Accelerometer' },
+    { key: 'gyroscope', title: 'Gyroscope' },
+    { key: 'magnetometer', title: 'Magnetometer' },
+    { key: 'deviceMotion', title: 'DeviceMotion' },
+  ]);
 
-function HomeScreen() {
+  const [accelerometerData, setAccelerometerData] = useState({});
+  const [gyroscopeData, setGyroscopeData] = useState({});
+  const [magnetometerData, setMagnetometerData] = useState({});
+  const [deviceMotionData, setDeviceMotionData] = useState({});
+
+  useEffect(() => {
+    const sensors = [
+      { sensor: Accelerometer, setData: setAccelerometerData },
+      { sensor: Gyroscope, setData: setGyroscopeData },
+      { sensor: Magnetometer, setData: setMagnetometerData },
+      { sensor: DeviceMotion, setData: setDeviceMotionData },
+    ];
+
+    const sensorListeners = sensors.map(({ sensor, setData }) => {
+      return sensor.addListener(data => {
+        setData(data);
+        saveData(sensor._eventName, data);
+      });
+    });
+
+    sensors.forEach(({ sensor }) => {
+      sensor.setUpdateInterval(1000);
+    });
+
+    initDatabase();
+
+    return () => {
+      sensorListeners.forEach(listener => listener.remove());
+    };
+  }, []);
+
+  const renderScene = SceneMap({
+    accelerometer: () => <SensorScreen data={accelerometerData} />,
+    gyroscope: () => <SensorScreen data={gyroscopeData} />,
+    magnetometer: () => <SensorScreen data={magnetometerData} />,
+    deviceMotion: () => <SensorScreen data={deviceMotionData} />,
+  });
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        renderTabBar={CustomTabBar}
+      />
     </View>
   );
-}
+};
 
-const Stack = createNativeStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default App;
