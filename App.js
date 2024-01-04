@@ -31,12 +31,13 @@ const App = () => {
     const sensorListeners = sensors.map(({ sensor, setData }) => {
       return sensor.addListener(data => {
         setData(data);
-        saveData(sensor._eventName, data);
+        const eventName = sensor._nativeEventName || 'UnknownSensor';   
+        saveData(eventName, data);
       });
     });
 
     sensors.forEach(({ sensor }) => {
-      sensor.setUpdateInterval(1000);
+      sensor.setUpdateInterval(10000);
     });
 
     initDatabase();

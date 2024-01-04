@@ -6,6 +6,14 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow $(PRODUCT_NAME) to access your device motion."
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "63d6394d-e2e2-4042-b83f-01828462d9dd"

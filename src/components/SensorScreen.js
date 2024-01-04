@@ -1,22 +1,41 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { fetchData } from '../services/database';
 
-const SensorScreen = ({ data }) => {
+const SensorScreen = () => {
+  const [dataList, setDataList] = useState([]);
+
+  const fetchDataFromDatabase = async () => {
+    try {
+      const dataFromDB = await fetchData();
+      setDataList(dataFromDB);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataFromDatabase();
+  }, []); 
+
   return (
-    <View style={styles.container}>
-      {Object.entries(data).map(([key, value]) => (
-        <View key={key} style={styles.dataContainer}>
-          <Text style={styles.label}>{key}:</Text>
-          <Text style={styles.value}>{JSON.stringify(value)}</Text>
+    <FlatList
+      data={dataList}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item, index }) => (
+        <View key={item.id} style={styles.dataContainer}>
+          <Text style={styles.label}>{`ID ${item.id}:`}</Text>
+          <Text style={styles.value}>{`${item.sensor}: ${item.data}`}</Text>
         </View>
-      ))}
-    </View>
+      )}
+    />
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -24,12 +43,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    width: '100%',
   },
   label: {
     fontWeight: 'bold',
     marginRight: 5,
   },
-  value: {},
+  value: {
+    flex: 1,
+  },
 });
+
 
 export default SensorScreen;
