@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
 import { fetchData } from '../services/database';
 
-const SensorScreen = () => {
+const SensorScreen = React.memo(() => {
   const [dataList, setDataList] = useState([]);
 
   const fetchDataFromDatabase = async () => {
@@ -18,20 +18,23 @@ const SensorScreen = () => {
     fetchDataFromDatabase();
   }, []); 
 
+  const renderItem = ({ item }) => (
+    <View key={item.id} style={styles.dataContainer}>
+      <Text style={styles.label}>{`ID ${item.id}:`}</Text>
+      <Text style={styles.value}>{`${item.sensor}: ${item.data}`}</Text>
+    </View>
+  );
+
   return (
     <FlatList
       data={dataList}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item, index }) => (
-        <View key={item.id} style={styles.dataContainer}>
-          <Text style={styles.label}>{`ID ${item.id}:`}</Text>
-          <Text style={styles.value}>{`${item.sensor}: ${item.data}`}</Text>
-        </View>
-      )}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={renderItem}
+      contentContainerStyle={styles.container}
+      extraData={dataList}
     />
-
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

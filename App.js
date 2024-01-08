@@ -9,10 +9,7 @@ import CustomTabBar from './src/components/TabBar';
 const App = () => {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'accelerometer', title: 'Accelerometer' },
-    { key: 'gyroscope', title: 'Gyroscope' },
-    { key: 'magnetometer', title: 'Magnetometer' },
-    { key: 'deviceMotion', title: 'DeviceMotion' },
+    { key: 'accelerometer', title: 'Senores' },
   ]);
 
   const [accelerometerData, setAccelerometerData] = useState({});
