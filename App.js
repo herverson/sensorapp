@@ -27,9 +27,23 @@ const App = () => {
 
     const sensorListeners = sensors.map(({ sensor, setData }) => {
       return sensor.addListener(data => {
-        setData(data);
         const eventName = sensor._nativeEventName || 'UnknownSensor';   
-        saveData(eventName, data);
+        const mapSensorName = (sensorName) => {
+          switch (sensorName) {
+            case 'deviceMotionDidUpdate':
+              return 'Device Motion';
+            case 'accelerometerDidUpdate':
+              return 'Accelerometer';
+            case 'magnetometerDidUpdate':
+              return 'Magnetometer';
+            case 'gyroscopeDidUpdate':
+              return 'Gyroscope';
+            default:
+              return sensorName;
+          }
+        };
+        setData(data);
+        saveData(mapSensorName(eventName), data);
       });
     });
 
