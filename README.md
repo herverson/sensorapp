@@ -27,19 +27,26 @@ cd nome-do-repositorio</code></pre>
 
   <p>Isso iniciará o Metro Bundler e abrirá a interface do Expo no navegador. Use o Expo Go no seu dispositivo para escanear o código QR exibido no terminal ou no navegador para iniciar o aplicativo no seu dispositivo.</p>
 
-  <h2>Construção do Aplicativo</h2>
+  <h2>Build do Aplicativo</h2>
 
-  <h3>1. Build para Android</h3>
+  <h3>1. Configuração do EAS:</h3>
+  <p>O Expo agora utiliza o EAS para compilar aplicativos. Certifique-se de ter o EAS CLI instalado globalmente:</p>
 
-  <pre><code>expo build:android</code></pre>
+  <pre><code>npm install -g eas-cli</code></pre>
+  <p>Autentique-se com o EAS:</p>
+  <pre><code>eas login</code></pre>
+  <p>Configure o EAS no seu projeto:</p>
+  <pre><code>eas init</code></pre>
+  
 
   <p>Siga as instruções no terminal para construir o APK. O arquivo APK gerado estará na pasta <code>android/app/build/outputs/apk/release/</code>.</p>
 
-  <h3>2. Build para iOS</h3>
+  <h3>2. Execução do Build:</h3>
+  <p> Para compilar seu aplicativo para Android, utilize o seguinte comando:</p>
+  <pre><code>eas build -p android</code></pre>
 
-  <pre><code>expo build:ios</code></pre>
-
-  <p>Siga as instruções no terminal para construir o aplicativo iOS. O arquivo IPA gerado estará disponível para download.</p>
+  <p>Isso iniciará o processo de build utilizando o EAS.
+Certifique-se de revisar a documentação oficial do Expo Application Services (EAS) para obter informações mais detalhadas e opções adicionais.</p>
 
   <h2>Observações</h2>
 
