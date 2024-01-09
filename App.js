@@ -48,7 +48,7 @@ const App = () => {
     });
 
     sensors.forEach(({ sensor }) => {
-      sensor.setUpdateInterval(10000);
+      sensor.setUpdateInterval(1000);
     });
 
     initDatabase();

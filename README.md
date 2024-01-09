@@ -37,9 +37,6 @@ cd nome-do-repositorio</code></pre>
   <pre><code>eas login</code></pre>
   <p>Configure o EAS no seu projeto:</p>
   <pre><code>eas init</code></pre>
-  
-
-  <p>Siga as instruções no terminal para construir o APK. O arquivo APK gerado estará na pasta <code>android/app/build/outputs/apk/release/</code>.</p>
 
   <h3>2. Execução do Build:</h3>
   <p> Para compilar seu aplicativo para Android, utilize o seguinte comando:</p>
@@ -47,6 +44,8 @@ cd nome-do-repositorio</code></pre>
 
   <p>Isso iniciará o processo de build utilizando o EAS.
 Certifique-se de revisar a documentação oficial do Expo Application Services (EAS) para obter informações mais detalhadas e opções adicionais.</p>
+
+  <p>Siga as instruções no terminal para construir o APK. O arquivo APK gerado estará na pasta <code>android/app/build/outputs/apk/release/</code>.</p>
 
   <h2>Observações</h2>
 
