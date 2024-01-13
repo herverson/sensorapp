@@ -1,68 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Accelerometer, Gyroscope, Magnetometer, DeviceMotion } from 'expo-sensors';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { initDatabase, saveData } from './src/services/database';
+import useSensorManager from './src/managers/SensorManager';
 import SensorScreen from './src/components/SensorScreen';
 import CustomTabBar from './src/components/TabBar';
 
 const App = () => {
   const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: 'accelerometer', title: 'Senores' },
-  ]);
+  const [routes] = useState([{ key: 'sensors', title: 'Sensors' }]);
+  const [sensorData, setSensorData] = useState({});
 
-  const [accelerometerData, setAccelerometerData] = useState({});
-  const [gyroscopeData, setGyroscopeData] = useState({});
-  const [magnetometerData, setMagnetometerData] = useState({});
-  const [deviceMotionData, setDeviceMotionData] = useState({});
-
-  useEffect(() => {
-    const sensors = [
-      { sensor: Accelerometer, setData: setAccelerometerData },
-      { sensor: Gyroscope, setData: setGyroscopeData },
-      { sensor: Magnetometer, setData: setMagnetometerData },
-      { sensor: DeviceMotion, setData: setDeviceMotionData },
-    ];
-
-    const sensorListeners = sensors.map(({ sensor, setData }) => {
-      return sensor.addListener(data => {
-        const eventName = sensor._nativeEventName || 'UnknownSensor';   
-        const mapSensorName = (sensorName) => {
-          switch (sensorName) {
-            case 'deviceMotionDidUpdate':
-              return 'Device Motion';
-            case 'accelerometerDidUpdate':
-              return 'Accelerometer';
-            case 'magnetometerDidUpdate':
-              return 'Magnetometer';
-            case 'gyroscopeDidUpdate':
-              return 'Gyroscope';
-            default:
-              return sensorName;
-          }
-        };
-        setData(data);
-        saveData(mapSensorName(eventName), data);
-      });
-    });
-
-    sensors.forEach(({ sensor }) => {
-      sensor.setUpdateInterval(1000);
-    });
-
-    initDatabase();
-
-    return () => {
-      sensorListeners.forEach(listener => listener.remove());
-    };
-  }, []);
+  useSensorManager(setSensorData);
 
   const renderScene = SceneMap({
-    accelerometer: () => <SensorScreen data={accelerometerData} />,
-    gyroscope: () => <SensorScreen data={gyroscopeData} />,
-    magnetometer: () => <SensorScreen data={magnetometerData} />,
-    deviceMotion: () => <SensorScreen data={deviceMotionData} />,
+    sensors: () => <SensorScreen data={sensorData} />,
   });
 
   return (

@@ -1,4 +1,4 @@
-import { openDatabase, deleteDatabase } from 'expo-sqlite';
+import { openDatabase } from 'expo-sqlite';
 
 const db = openDatabase('sensorData.db');
 
